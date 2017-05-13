@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSSpeechSynthesizerDelegate {
+class ViewController: NSViewController, NSSpeechSynthesizerDelegate, NSWindowDelegate, NSTableViewDataSource {
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var speakButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
@@ -17,12 +17,21 @@ class ViewController: NSViewController, NSSpeechSynthesizerDelegate {
     var isSpeaking = false
     
     let speechSynthesizer = NSSpeechSynthesizer()
+    
+    let voices = NSSpeechSynthesizer.availableVoices() as [String]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         speechSynthesizer.delegate = self
         updateButtons()
+        for voice in voices{
+            print(voiceNameForIdentifier(identifier: voice))
+        }
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear() {
+        self.view.window?.delegate = self
     }
 
     override var representedObject: Any? {
@@ -36,9 +45,18 @@ class ViewController: NSViewController, NSSpeechSynthesizerDelegate {
         stopButton.isEnabled = isSpeaking
     }
     
+    func windowShouldClose(_ sender: Any) -> Bool {
+        return !isSpeaking
+    }
+    
     func speechSynthesizer(_ sender: NSSpeechSynthesizer, didFinishSpeaking finishedSpeaking: Bool) {
         isSpeaking = false
         updateButtons()
+    }
+    
+    func voiceNameForIdentifier(identifier: String) -> String?{
+        let attributes = NSSpeechSynthesizer.attributes(forVoice: identifier)
+        return attributes[NSVoiceName] as? String
     }
 
     @IBAction func speakIt(_ sender: Any) {
@@ -52,6 +70,16 @@ class ViewController: NSViewController, NSSpeechSynthesizerDelegate {
     
     @IBAction func stopIt(_ sender: Any) {
         speechSynthesizer.stopSpeaking()
+    }
+    
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        return voices.count
+    }
+    
+    func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
+        let voice = voices[row]
+        let voiceName = voiceNameForIdentifier(identifier: voice)
+        return voiceName
     }
 
 }
