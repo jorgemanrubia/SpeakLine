@@ -130,6 +130,7 @@
                                             </tableColumns>
                                             <connections>
                                                 <outlet property="dataSource" destination="XfG-lQ-9wD" id="S6y-d1-4XW"/>
+                                                <outlet property="delegate" destination="XfG-lQ-9wD" id="Toi-Sg-6qh"/>
                                             </connections>
                                         </tableView>
                                     </subviews>
@@ -152,6 +153,7 @@
                     <connections>
                         <outlet property="speakButton" destination="AdI-zF-Ocm" id="ETt-jW-O6S"/>
                         <outlet property="stopButton" destination="taP-z6-R5X" id="I4V-h6-61l"/>
+                        <outlet property="tableView" destination="Liu-6Z-THk" id="URf-eg-O7X"/>
                         <outlet property="textField" destination="dpB-sq-tsB" id="bSg-nC-xhF"/>
                     </connections>
                 </viewController>

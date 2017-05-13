@@ -8,10 +8,11 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSSpeechSynthesizerDelegate, NSWindowDelegate, NSTableViewDataSource {
+class ViewController: NSViewController, NSSpeechSynthesizerDelegate, NSWindowDelegate, NSTableViewDataSource, NSTableViewDelegate {
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var speakButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
+    @IBOutlet weak var tableView: NSTableView!
     
     
     var isSpeaking = false
@@ -80,6 +81,16 @@ class ViewController: NSViewController, NSSpeechSynthesizerDelegate, NSWindowDel
         let voice = voices[row]
         let voiceName = voiceNameForIdentifier(identifier: voice)
         return voiceName
+    }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        let row = tableView.selectedRow
+        if row == -1 {
+            speechSynthesizer.setVoice(nil);
+            return
+        }
+        let voice = voices[row]
+        speechSynthesizer.setVoice(voice)
     }
 
 }
